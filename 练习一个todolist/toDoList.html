@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To Do List</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model.number="content" @keyup.enter="onClick">
+        <button @click="onClick">提交</button>
+        <p>正在添加的任务：{{ content }}</p>
+        <h4>已完成的任务：</h4>
+        <ul class="tastList">
+            <li v-for="(items,index) in task" :key="index">{{ items }}
+                <button @click="onRemove(index)">删除</button>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            content: '',
+            task: [],
+        },
+        methods: {
+            onClick: function () {
+                this.task.push(this.content);
+                this.content = '';
+            },
+            onRemove: function (index) {
+                this.task.splice(index,1);
+            }
+        }
+
+    })
+</script>
+</html>
