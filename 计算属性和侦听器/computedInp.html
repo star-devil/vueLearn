@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>两个input相加</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ person }}
+        <br />
+        两数相加：<input type="text" v-model.number="firstNum"> + <input type="text" v-model.number="lastNum">
+        <br />
+        计算结果：<input type="text" v-model.number="sum">
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            firstNum: null,
+            lastNum: null,
+            name: 'she-devil',
+            age: 18,
+            person: '',
+        },
+        // mounted () {
+        //     this.getPerson(); //数据绑定时执行
+        // },
+        // methods: {
+        //     getPerson() {
+        //         this.person = `姓名：${this.name},年龄：${this.age}`;
+        //     }
+        // },
+        computed: {
+            // person() {
+            //     return `姓名：${this.name},年龄：${this.age}`;
+            // },
+            sum: {
+                get() {
+                    if (!this.firstNum && !this.lastNum) {
+                        return null;
+                    } else {
+                        return this.firstNum + this.lastNum;
+                    }
+                },
+                set(val) {
+                    let avg = val / 2
+                    this.firstNum = avg;
+                    this.lastNum = avg;
+                }
+            }
+        },
+        watch: {
+            // name(newVal) {
+            //     this.person = `姓名：${newVal},年龄：${this.age}`;
+            // },
+            // age (newVal) {
+            //     this.person = `姓名：${this.name},年龄：${newVal}`;
+            // }
+            name: {
+                handler (newVal) {
+                    this.person = `姓名：${newVal},年龄：${this.age}`;
+                },
+                immediate: true,
+            },
+            age: {
+                handler (newVal) {
+                    setTimeout (() =>{
+                        this.person = `姓名：${this.name},年龄：${newVal}`;
+                    },2000)
+                },
+                immediate: true,
+            }
+        }
+    })
+</script>
+
+</html>
