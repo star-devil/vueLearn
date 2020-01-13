@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>子传父</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <my-content @click.native="func"></my-content> 直接在组件上触发事件-->
+        <!-- <my-content :func="func"></my-content> 函数传参 -->
+        <!-- <my-content @click="func" @mousedown="down"></my-content> $listener -->
+        <my-content @click="like"></my-content>  <!--$emit -->
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+//$emit
+const vm = new Vue({
+    el: "#app",
+    methods: {
+       like(data){
+           console.log("like",data)
+       }
+    },
+    components: {
+        myContent: {
+            data() {
+                return {
+                    msg: "hello",
+                }
+            },
+            methods:{
+                handleClick() {
+                    this.$emit('click',this.msg);
+                }
+            },
+            template: `<div class="content">{{ msg }}
+                        <button @click="handleClick">点击</button>
+                    </div>`,
+        }
+    }
+})
+
+
+
+// $listener
+// const vm = new Vue({
+//     el: "#app",
+//     methods: {
+//         func(data) {
+//             console.log("click",data)
+//         },
+//         down() {
+//             console.log("down")
+//         }
+//     },
+//     components: {
+//         myContent: {
+//             data() {
+//                 return {
+//                     msg: "hello",
+//                 }
+//             },
+//             methods:{
+//                 handleClick() {
+//                     this.$listeners.click(this.msg);
+//                 }
+//             },
+//             template: `<div class="content">{{ msg }}
+//                         <button @click="handleClick">点击</button>
+//                         <button v-on="$listeners">click</button>
+//                     </div>`,
+//         }
+//     }
+// })
+
+//直接在组件上触发事件
+    // const vm = new Vue({
+    //     el: "#app",
+    //     methods: {
+    //         func(data) {
+    //             console.log("子组件的", data);
+    //         }
+    //     },
+    //     components: {
+    //         myContent: {
+    //             props: ['func'],
+    //             data() {
+    //                 return {
+    //                     msg: "hello",
+    //                 }
+    //             },
+    //             template: `<div class="content">{{ msg }}
+    //                         <button>点击</button>
+    //                     </div>`,
+    //         }
+    //     }
+    // })
+
+
+    //函数传参
+    // const vm = new Vue({
+    //     el: "#app",
+    //     methods: {
+    //         func(data) {
+    //             console.log("子组件的", data);
+    //         }
+    //     },
+    //     components: {
+    //         myContent: {
+    //             props: ['func'],
+    //             data() {
+    //                 return {
+    //                     msg: "hello",
+    //                     test: "world"
+    //                 }
+    //             },
+    //             methods: {
+    //                 handleClick() {
+    //                     console.log("点击");
+    //                     this.func(this.test);
+    //                 }
+    //             },
+    //             template: `<div class="content">{{ msg }}
+    //                         <button @click="handleClick">点击</button>
+    //                     </div>`,
+    //         }
+    //     }
+    // })
+
+    // ref引用
+
+    // const vm = new Vue({
+    //     el: "#app",
+    //     mounted() {
+    //         console.log(this.$refs.cmp.msg);
+    //         this.$refs.cmp.cmpFun();
+    //     },
+    //     components: {
+    //         myContent: {
+    //             data() {
+    //                 return {
+    //                     msg: "hello",
+    //                     temp: "",
+    //                 }
+    //             },
+    //             mounted() {
+    //                 this.temp = this.$refs.temp.test;
+    //                 console.log(this.temp)
+    //             },
+    //             methods: {
+    //                 cmpFun() {
+    //                     console.log("打印")
+    //                 },
+    //             },
+    //             template: `<div class="content">
+    //                             {{ temp }}
+    //                             <my-temp ref="temp"></my-temp>
+    //                        </div>`,
+    //             components: {
+    //                 myTemp: {
+    //                     data() {
+    //                         return {
+    //                             test: "world"
+    //                         }
+    //                     },
+    //                     template: `<div></div>`
+    //                 },
+    //             }
+    //         }
+    //     }
+    // })
+</script>
+
+</html>

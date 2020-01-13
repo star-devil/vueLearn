@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子间通信</title>
+</head>
+
+<body>
+    <div id="app">
+        <my-title :title="title" :content="content">
+        </my-title>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    const vm = new Vue({
+        el: "#app",
+        provide: {
+            title: '我是标题',
+            content: '我是内容我是内容我是内容我是内容我是内容'
+        },
+        components: {
+            myTitle: {
+                inject: ["title"],
+                template: `<div class="title">
+                        <h3>{{ title }}</h3>
+                        <my-p v-bind="$attrs"></my-p>
+                        <my-p></my-p>
+                        <my-p></my-p>
+                    </div>`,
+                components: {
+                    myP: {
+                        inject: ["content"],
+                        template: `<div class="content">{{ content }}</div>`
+                    },
+                }
+            },
+        }
+    });
+    // const vm = new Vue({
+    //     el: '#app',
+    //     data: {
+    //         title: '我是标题',
+    //         content: '我是内容我是内容我是内容我是内容我是内容'
+    //     },
+    //     components: {
+    //         myTitle: {
+    //             props:["title"],
+    //             inheritAttrs: false,
+    //             created() {
+    //                 console.log(this.$attrs);//打印未注册的data（title\content）
+    //                 // this.title = this.$parent.title;
+    //                 // console.log(this.$parent);
+    //             },
+    //             mounted() {
+    //                 // console.log(this.title);
+    //             },
+    //             template: `<div class="title">
+    //                         <h3>{{ title }}</h3>
+    //                         <my-p v-bind="$attrs"></my-p>
+    //                         <my-p></my-p>
+    //                         <my-p></my-p>
+    //                     </div>`,
+    //             components: {
+    //                 inheritAttrs: false,
+    //                 myP: {
+    //                     props: ["content"],
+    //                     created() {
+    //                         // this.content = this.$parent.$parent.content
+    //                     },
+    //                     template: `<div class="content">{{ content }}</div>`
+    //                 },
+    //             }
+    //         },
+    //     }
+    // })
+</script>
+
+</html>

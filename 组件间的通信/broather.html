@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>兄弟组件间通信-event bus</title>
+</head>
+<body>
+    <div id="app">
+        <my-input></my-input>
+        <hr>
+        <my-content></my-content>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.prototype.bus = new Vue();
+    const vm = new Vue({
+        el: '#app',
+        components: {
+            myInput:{
+                data() {
+                    return {
+                        myInpVal: '',
+                    }
+                },
+                methods:{
+                    handleClick () {
+                        this.bus.$emit('click',this.myInpVal)
+                        // console.log(this.myInpVal);
+                    }
+                },
+                template: `<div>
+                                <input type="text" v-model="myInpVal">
+                                <button @click="handleClick">提交</button>
+                           </div>`,
+            },
+            myContent:{
+                data () {
+                    return {
+                        content: "",
+                    }
+                },
+                created () {
+                    this.bus.$on('click',content => {
+                        this.content = content;
+                    })
+                },
+                template: `<div class="content">{{ content }}</div>`
+            }
+        }
+    })
+</script>
+</html>
