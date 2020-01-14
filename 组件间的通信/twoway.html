@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>双向通信</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <my-content :value="value" :obj="obj"></my-content> -->
+        <div>当前计数：{{ count }}</div>
+        <hr />
+        <!-- <my-content :value="count" @input="handleInput"></my-content> 
+        <my-content v-model="count"></my-content> -->
+        <!-- <my-content :value="count" @update:value="handleInput"></my-content> -->
+        <my-content :value.sync="count"></my-content>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.component('myContent', {
+        props: ["value"],
+        mounted() {
+            setInterval(() => {
+                let value = this.value + 1;
+                this.$emit('update:value', value);
+            }, 1000);
+        },
+        template: `<div>{{ value }}</div>`
+    })
+    const vm = new Vue({
+        el: "#app",
+        data: {
+            count: 100,
+        },
+
+        methods: {
+            // handleInput(value){
+            //     this.count = value;
+            // }
+        },
+    })
+    // Vue.component('myContent', {
+    //     props: ["value"],
+    //     mounted() {
+    //         setInterval(() => {
+    //             let value = this.value+1;
+    //             this.$emit('input',value);
+    //         }, 1000);
+    //     },
+    //     template: `<div>{{ value }}</div>`
+    // })
+    // const vm = new Vue({
+    //     el: "#app",
+    //     data: {
+    //         count: 100,
+    //     },
+
+    //     methods:{
+    //         // handleInput(value){
+    //         //     this.count = value;
+    //         // }
+    //     },
+    // })
+    //单向数据流
+    // Vue.component('myContent',{
+    //     props:["value","obj"],
+    //     data(){
+    //         return {
+    //             myObj: JSON.parse(JSON.stringify(this.obj)),//将obj转化为自身数据
+    //         }
+    //     },
+    //     mounted() {
+    //         setInterval(() => {
+    //             this.myObj.count++; //正常执行
+    //         }, 1000);
+    //     },
+    //     methods:{
+    //         handleClick() {
+    //             this.value = 10; //value没有进行转化，报警告
+    //         }
+    //     },
+    //     template:`<div>{{ this.myObj.count }}<button @click="handleClick">点击</button></div>`
+    // })
+    // const vm = new Vue({
+    //     el: "#app",
+    //     data:{
+    //         value: 100,
+    //         obj:{
+    //             count: 1,
+    //         }
+    //     }
+    // })
+</script>
+
+</html>
