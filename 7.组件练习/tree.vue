@@ -9,7 +9,7 @@
         class="tree-li"
         :class="{
             'scope': item.children,
-            'acctive': showChildren[index]
+            'active': showChildren[index]
         }"
     >
       <span @click="handleClick(index)">{{ item.name }}</span>
