@@ -8,26 +8,25 @@ dom节点上自定义data-day属性,会存放在对应的事件对象中,e.targe
 <template>
   <div class="calendar">
     <div class="date-header">
-      <div class="prev-month" />
+      <div class="prev-month" @click="handlePrev"/>
       <div class="show-date">{{ year }}年{{ month }}月{{ day }}日</div>
-      <div class="next-month" />
+      <div class="next-month" @click="handleNext"/>
     </div>
     <div class="date-content">
       <div class="week-header">
         <div v-for="item in ['日', '一', '二', '三', '四', '五', '六']" :key="item">{{ item }}</div>
       </div>
       <div class="week-day">
-        <div 
-            class="every-day" 
-            v-for="item in 42" 
-            :key="item"
-        >
-          <div 
+        <div class="every-day" v-for="item in 42" :key="item">
+          <div
             v-if="item - beginDay > 0 && item - beginDay <= curDays"
             :class="{
                 'now-day': `${year}-${month}-${item - beginDay}` === curDate,
+                'active-day': `${year}-${month}-${item - beginDay}` === `${year}-${month}-${day}`
                 }"
-            >{{ item - beginDay}}</div>
+            :data-day="item - beginDay"
+            @click="handleChooseDay"
+          >{{ item - beginDay}}</div>
           <div class="other-day" v-else-if="item - beginDay <= 0">{{ item - beginDay + prevDays }}</div>
           <div class="other-day" v-else>{{ item - curDays - beginDay}}</div>
         </div>
@@ -55,7 +54,34 @@ export default {
       this.year = date.getFullYear();
       this.month = date.getMonth() + 1;
       this.day = date.getDate();
-      this.curDate = `${this.year}-${this.month}-${this.day}`
+      this.curDate = `${this.year}-${this.month}-${this.day}`;
+    },
+    handleChooseDay(e) {
+      this.day = e.target.dataset.day;
+    },
+    handlePrev() {
+      if(this.month == 1){
+        this.year --;
+        this.month = 12
+      }else{
+        this.month--;
+      }
+      this.allDays(); 
+    },
+    handleNext() {
+      if(this.month == 12){
+        this.year ++;
+        this.month = 1
+      }else{
+        this.month++;
+      }
+      this.allDays(); 
+    },
+    allDays() {
+      const allDays = new Date(this.year, this.month, 0).getDate();
+      if( this.day >= allDays){
+        this.day = allDays;
+      }
     }
   },
   computed: {
@@ -63,10 +89,10 @@ export default {
       return new Date(this.year, this.month - 1, 1).getDay();
     },
     curDays() {
-        return new Date(this.year, this.month, 0).getDate();
+      return new Date(this.year, this.month, 0).getDate();
     },
     prevDays() {
-        return new Date(this.year, this.month - 1, 0).getDate();
+      return new Date(this.year, this.month - 1, 0).getDate();
     }
   }
 };
