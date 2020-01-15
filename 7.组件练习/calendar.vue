@@ -98,7 +98,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 .calendar {
   width: 500px;
   margin-left: 100px;
