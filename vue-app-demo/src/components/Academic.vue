@@ -1,10 +1,12 @@
 <template>
   <ul class="academic">
-      <li 
+      <router-link tag="li"
+        
         v-for="question in questionList" :key="question.questionId"
+        :to="{name:'question',params:{id: question.questionId}}"
         >
         {{ question.title }}
-      </li>
+      </router-link>
   </ul>
 </template>
 
@@ -36,5 +38,6 @@ export default {
 <style scoped>
 li {
   margin-bottom: 20px;
+  cursor: pointer;
 }
 </style>

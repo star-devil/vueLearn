@@ -34,7 +34,7 @@ const routes = [
       {
         path: 'academic',
         name: 'academic',
-        component: () => import('../components/Academic.vue')
+        component: () => import('../components/Academic.vue'),
       },
       {
         path: 'personal',
@@ -47,6 +47,11 @@ const routes = [
         component: () => import('../components/Download.vue')
       }
     ]
+  },
+  {
+    path: '/question/:id',
+    name: 'question',
+    component: () => import('../views/Question.vue')
   },
   {
     path: '/notfound',
@@ -71,5 +76,10 @@ const router = new VueRouter({
   linkActiveClass: "active",
   routes
 })
-
+////这段话就是刚刚报错我在网上复制的第一种方法 不要就要报错 我也看不懂没看
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+///
 export default router
