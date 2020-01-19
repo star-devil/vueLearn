@@ -40,17 +40,17 @@ const routes = [
       {
         path: 'academic',
         name: 'academic',
-        component: () => import('../components/Academic.vue'),
+        component: () => import('../views/Academic.vue'),
       },
       {
         path: 'personal',
         name: 'personal',
-        component: () => import('../components/Personal.vue')
+        component: () => import('../views/Personal.vue')
       },
       {
         path: 'download',
         name: 'download',
-        component: () => import('../components/Download.vue')
+        component: () => import('../views/Download.vue')
       }
     ]
   },
