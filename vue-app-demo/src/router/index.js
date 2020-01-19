@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
   },
   {
     path: '/learn',
@@ -18,7 +18,10 @@ const routes = [
   {
     path: '/student',
     name: 'student',
-    component: () => import('../views/Student.vue')
+    component: () => import('../views/Student.vue'),
+    meta:{
+      login: true,
+    },
   },
   {
     path: '/about',
@@ -30,6 +33,9 @@ const routes = [
     name: 'community',
     component: () => import('../views/Community.vue'),
     redirect: '/community/academic',
+    meta:{
+      login: true,
+    },
     children:[
       {
         path: 'academic',
@@ -54,6 +60,11 @@ const routes = [
     component: () => import('../views/Question.vue')
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+  {
     path: '/notfound',
     name: 'notfound',
     component: () => import('../views/Notfound.vue')
@@ -76,10 +87,5 @@ const router = new VueRouter({
   linkActiveClass: "active",
   routes
 })
-////这段话就是刚刚报错我在网上复制的第一种方法 不要就要报错 我也看不懂没看
-const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
-///
+
 export default router
