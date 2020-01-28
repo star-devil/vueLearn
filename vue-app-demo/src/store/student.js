@@ -1,5 +1,4 @@
 export default {
-    namespace: true,
     state: {
         name: '默认',
         age: 0,

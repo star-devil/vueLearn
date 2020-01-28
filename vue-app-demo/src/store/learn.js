@@ -1,5 +1,5 @@
 export default {
-    namespace: true,
+    namespaced: true,
     state:{
         coursename: 'vuex-Moudle学习',
         price: 10,

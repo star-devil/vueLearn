@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 //引入子组件
 import AddStudent from '@/components/Learn/AddStudent'
 import StudentList from '@/components/Learn/StudentList'
@@ -21,8 +21,8 @@ export default {
         StudentList
     },
     computed: {
-        ...mapGetters('learn','[coursePrice]'),
-        ...mapState('learn','[courseName]')
+        ...mapGetters('learn',['coursePrice']),
+        ...mapState('learn',['coursename'])
     },
     methods: {
         handleClick() {

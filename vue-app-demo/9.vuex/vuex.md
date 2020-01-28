@@ -156,4 +156,21 @@ computed:{
 - 导入之后store中有每个导入的state,state中的数据属于每一个模块的，不再是store.state中，mutations、actions、getters依旧是全局的
 - 可以通过`this.$store.getters.xxx`/`this.$store.commit()`/`this.$store.moudle(js).xxx`取
 2. 可以给每个模块state一个单独的命名空间
+-  `namespced: true`
 - 通过`...mapXxx()`的方式获取时，第一个参数要放命名空间的名字，第二个参数才是方法名
+
+### 获取vuex中的数据（无namespaced）
+- 获取state : this.$store.state.moduleName.xxx
+- 获取getters： this.$store.getters.xxx
+- 获取mutations： this.$store.commit('xxx')
+- 获取actions： this.$store.dispatch('xxx')
+- 可以通过mapXXX 方式拿到getters、mutations、action，但是不能拿到state，如果想通过这种方式获取state，需要加命名空间：namespaced：true
+
+### 获取vuex中的数据（有namespaced）
+- 获取state : this.$store.state.moduleName.xxx
+- 获取getters： this.$store['moduleName/getters'].xxx
+- 获取mutations： this.$store.commit('moduleName/xxx')
+- 获取actions： this.$store.dispatch('moduleName/xxx')
+- 可以通过mapXXX: mapXXX('moduleName', ['xxx'])  mapXXX('moduleName', {})
+
+## 发送请求需要下载axios
