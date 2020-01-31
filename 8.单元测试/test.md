@@ -320,3 +320,86 @@ expect(mockFn.mock.calls.length).toBe(2); //测试函数是否执行了两次
 - 1. 利用nextTick和done执行异步 
 - 2. 利用返回Promise测试异步
 - 3. 利用async await测试异步
+
+4. 测试vuex
+- 下载：vue add vuex
+- 使用：在测试用例中使用vuex
+    - 因为不是所有的用例都会用到vuex,所以不能用Vue去use 'vuex',这样会导致没有用到vuex的实例被污染，因此使用了createLocalVue方法
+    - 1. 以下代码都是测试vuex执行过程中各函数是否正常执行的情况
+    ```js
+    import { mount, createLocalVue} from "@vue/test-utils"
+    import Vuex from 'vuex'
+    let localVue = createLocalVue();
+    localVue.use(vuex);
+    ```
+    - 在it用例中挂载元素时，需要将createLocalVue当做第二个参数传进去，其中有createLocalVue()和vuex实例
+    ```js
+    let state;
+    let store;
+    // 将store定义在beforeEach中是为了避免a测试用例中修改store中的state污染其他测试用例的state
+    beforeEach() {
+        // 测试vuex中的什么就需要伪造一个什么
+        state = { count: 1 };
+        mutations = {
+            changeCount: jest.fn();//测试mutation时需要借助mock函数伪造一个函数，去判断函数的执行次数
+        }
+        store = new Vuex.Store({
+            state
+        })
+    }
+    it("CCCC",() =>{
+        const wrapper = mount(Test,{
+            localVue,
+            store
+        })
+    })
+    it('测试mutations',() =>{
+        const wrapper = mount(Count,{
+            localVue,
+            store
+        });
+        wrapper.findAll('button').at(0).trigger('click')
+        expect(mutations.changeCount.mock.calls.length).toBe(1);//判断执行次数第一种方法
+        expect(mutations.changeCount).toHaveBeenCalled();//判断执行次数的第二种方法
+    })
+    ```
+    - 2. 测试vuex函数执行过程中数据是否按函数正常改变
+    ```js
+    //store index.js配置导出，在mian.js中需要修改如下
+    import config from './store'
+    import Vuex from 'vuex'
+
+    let store = new Vuex.Store(config)
+    ```
+    ```js
+    import { createLocalVue } from '@vue/test-utils';
+    import Vuex from 'vuex';
+    import config from '@/store/index.js';
+    import { deepClone } from 'lodash'
+
+
+    describe("count.vue -> vuex", () =>{
+        it("mutations",() =>{
+            let localVue = createLocalVue();
+            localVue.use(Vuex);
+            let store = new Vuex.Store(deepClone(config)); //拿到store中的定义对象，而不是整个实例，需要在store index函数中仅导出配置，并只引用配置
+            expect(store.state.count).toBe(1); //函数执行前的值
+            store.commit('changeCount',10); // 执行函数，这里提交之后会改变config中的值，导致下个测试用例中的config被污染,所以上面用了deepClone去复制config
+            expect(store.state.count).toBe(11);
+        })
+
+        it("actions",() =>{
+        let localVue = createLocalVue();
+        localVue.use(Vuex);
+        let store = new Vuex.Store(cloneDeep(config)); 
+        expect(store.state.count).toBe(1); //函数执行前的值
+        jest.useFakeTimers();// jest中提供的一个模拟定时器
+        store.dispatch('changeCount',10); // 执行函数
+        jest.runAllTimers();//函数执行完之后，快进时间，直接跳过剩下的时间
+        expect(store.state.count).toBe(11);
+    })
+    })
+    ```
+
+
+> 小tips:在测试中按p键输入文件名可以值执行该测试文件
