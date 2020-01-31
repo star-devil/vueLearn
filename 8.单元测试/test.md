@@ -291,3 +291,32 @@ it("获取age值", done => {
 ```
 ## jest
 - 测试框架（主推）
+- 集成了断言库和sinon，使用时不需要再引入
+- 匹配语法
+  > https://jestjs.io/docs/zh-Hans/using-matchers
+- mock函数
+  > https://jestjs.io/docs/zh-Hans/mock-functions
+
+1. 断言语法：
+> expect(abs(1)).toBe(1); //断言相等
+> expect(abs(1)).toEqual(1); //断言引用类型相等
+> expect(abs(1)).toHaveLength(length); //判断长度
+> expect(abs(1)).toBeTrue(length); //判断真
+> expect(abs(1)).toBeFalse(length); //判断假
+> expect(wrapper.text()).toMatch(msg)
+
+2. 测试函数
+```js
+const mockFn = jest.fn();
+wrapper.setProps({ fn: mockFn });
+wrapper.findAll('button').at(1).trigger('click');
+expect(mockFn.mock.calls.length).toBe(2); //测试函数是否执行了两次
+```
+
+3. 测试异步函数
+- jest测试异步函数不需要依赖moxios,但是需要自己建一个__mocks__文件中写一个axios.js文件->建在test文件下
+- 在测试文件中要引入axios文件
+> jest.mock('axios');
+- 1. 利用nextTick和done执行异步 
+- 2. 利用返回Promise测试异步
+- 3. 利用async await测试异步
